@@ -13,7 +13,7 @@ def parse_sentences(sentences, column):
 	
 def handle(path, item):
 	lang = path[1][1]['lang']
-	sentences = item['s'] if lang == 'sr' else []
+	sentences = item['s'] if (lang == 'sr') and (item['s'] is not None) else []
 	
 	if type(sentences) is not list:
 		sentences = [sentences]
