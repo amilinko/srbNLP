@@ -1,4 +1,4 @@
-import docopt
+import sys
 import xmltodict
 from gzip import GzipFile
 
@@ -21,9 +21,11 @@ def handle(path, item):
 	parse_sentences (sentences, column)
 	return True
 	
-file = '../srWaC/gz/srWaC1.1.01.xml.gz'
-#file = '../srWaC/gz/small.xml.gz'
+if len(sys.argv)<>3:
+	print "Usage: python parse.py <filename> <column>"
+	sys.exit(1)
 
-column = 0
+filename = sys.argv[1]
+column = int(sys.argv[2])
 
-xmltodict.parse(GzipFile(file), item_depth=2, item_callback=handle, dict_constructor=dict)
+xmltodict.parse(GzipFile(filename), item_depth=2, item_callback=handle, dict_constructor=dict)
