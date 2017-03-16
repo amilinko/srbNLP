@@ -12,7 +12,7 @@ This is a Python module that makes working with XML feel like you are working wi
     $ [sudo] pip install xmltodict
 ### Usage
     $ python parse.py <filename> <column>
-where `filename` is path to one of the **srWaC** **xml.gz** archives, and `column` is the number of column to parse. This will print parsed data on `stdout`.
+where `filename` is the path to one of the **srWaC** **xml.gz** archives, and `column` is the number of column to parse. This will print parsed data on `stdout`.
 To save parsed data in a file, run (in Linux):
 
-    $ python parse <filename> <column> >> data.txt
+    $ python parse.py <filename> <column> >> data.txt
