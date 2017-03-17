@@ -20,7 +20,8 @@ def handle(path, item):
 	
 	parse_sentences (sentences, column)
 	return True
-	
+
+# Parse command line arguments
 if len(sys.argv)<>3:
 	print "Usage: python parse.py <filename> <column>"
 	sys.exit(1)
@@ -28,4 +29,5 @@ if len(sys.argv)<>3:
 filename = sys.argv[1]
 column = int(sys.argv[2])
 
+# Parse in streaming mode
 xmltodict.parse(GzipFile(filename), item_depth=2, item_callback=handle, dict_constructor=dict)
