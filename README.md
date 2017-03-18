@@ -13,7 +13,7 @@ Before describing and running the tools, it is highly recommended to install `Pi
 # Usage
 
 ## Parse
-This tool is used to parse the data from Serbian Web Corpus (srWaC). The whole corpus is divided into several archives which can be found here: https://www.clarin.si/repository/xmlui/handle/11356/1063.
+This tool is used for parsing the data from Serbian Web Corpus (srWaC). The whole corpus is divided into several archives which can be found [here](https://www.clarin.si/repository/xmlui/handle/11356/1063).
 This module has one dependency. It uses external module called [xmltodict](http://omz-software.com/pythonista/docs/ios/xmltodict.html) which can be easily installed by running this command:
 
 	$ [sudo] pip install xmltodict
@@ -43,7 +43,15 @@ These two scripts can work in parallel. Run this command:
 This will parse and filter input data in parallel. The output of `parse.py` will be the input of `filter.py`.
 
 ## Stem
-TO DO
+This tool is a Python wrapper around the collection of 4 stemmers for Serbian language which are taken from [here](https://github.com/vukbatanovic/SCStemmers).
+This tool has one dependency which is the **jar** archive of all 4 stemmers. To download it, run this command (in Linux):
+
+	$ wget https://github.com/vukbatanovic/SCStemmers/releases/download/v1.0.0/SCStemmers.jar
+Make sure that this archive is located in the same directory as the `stem` tool.
+Now, let's run the stemmer:
+
+	$ python stem.py <StemmerID> <InputFile> <OutputFile>
+where the command line arguments are the same as they are described [here]([here](https://github.com/vukbatanovic/SCStemmers#command-line-interface).
 
 ## Lemmatize
 TO DO
