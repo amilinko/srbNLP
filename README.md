@@ -51,7 +51,7 @@ Make sure that this archive is located in the same directory as the `stem` tool.
 Now, let's run the stemmer:
 
 	$ python stem.py <StemmerID> <InputFile> <OutputFile>
-where the command line arguments are the same as they are described [here]([here](https://github.com/vukbatanovic/SCStemmers#command-line-interface).
+where the command line arguments are the same as they are described [here](https://github.com/vukbatanovic/SCStemmers#command-line-interface).
 
 ## Lemmatize
 TO DO
