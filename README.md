@@ -2,43 +2,32 @@
 This project is a set of tools for extracting, modifying and vectorizing text written in Serbian language.
 These are `parse`, `filter`, `stem`, `lemmatize` and `vectorize`. Each one of them is described below.
 
-## Dependencies
-Before describing and running the tools, it is highly recommended to install `Pip` as each tool uses external modules. 
-### Pip
-`Pip` is a package management system used to install and manage software packages written in Python. If you don't have it installed, run:
-    
-    $ wget https://bootstrap.pypa.io/get-pip.py
-    $ [sudo] python get-pip.py
-
 # Usage
 
 ## Parse
 This tool is used for parsing the data from Serbian Web Corpus (srWaC). The whole corpus is divided into several archives which can be found [here](https://www.clarin.si/repository/xmlui/handle/11356/1063).
-This module has one dependency. It uses external module called [xmltodict](http://omz-software.com/pythonista/docs/ios/xmltodict.html) which can be easily installed by running this command:
+To run, type:
 
-	$ [sudo] pip install xmltodict
-This is a Python module that makes working with XML feel like you are working with JSON. It parses and converts XML files to Python dictionaries.
-Now, we can run the parser:
+    $ python parse.py [<filename>...]
+where `filename` is the path to one (or more) **srWaC xml** files(s). This will print parsed data on `stdout`. In case no `filename` is specified, the tool will use `stdin` as input data.
+To save parsed data in a file, run:
 
-    $ python parse.py <filename> <column>
-where `filename` is the path to one of the **srWaC** **xml.gz** archives, and `column` is the number of column to parse. This will print parsed data on `stdout`.
-To save parsed data in a file, run (in Linux):
-
-    $ python parse.py <filename> <column> >> parsed_data.txt
+    $ python parse.py [<filename>...] > parsed_data.txt
 	
 ## Filter
-This tool doesn't have any dependency, so we can simply run it:
+This tool is used for filtering the data (usually output from `parse` tool). Only English and Serbian latin alphabet letters are allowed. 
+To run, type:
 
-	$ python filter.py <filename>
-where `filename` is the path to input file which contains parsed sentences. This will print filtered data on `stdout`.
-To save filtered data in a file, run (in Linux):
+	$ python filter.py [<filename>...]
+where `filename` is the path to one (or more) input file(s) which contain parsed sentences. This will print filtered data on `stdout`. In case no `filename` is specified, the tool will use `stdin` as input data.
+To save filtered data in a file, run:
 
-	$ python filter.py <filename> >> filtered_data.txt
+	$ python filter.py [<filename>...] > filtered_data.txt
 	
 ## Parse & Filter
-These two scripts can work in parallel. Run this command:
+These two scripts can work in parallel. For example:
 
-	$ python parse.py <filename> <column> | python filter.py > data.txt
+	$ python parse.py [<filename>...] | python filter.py > data.txt
 	
 This will parse and filter input data in parallel. The output of `parse.py` will be the input of `filter.py`.
 

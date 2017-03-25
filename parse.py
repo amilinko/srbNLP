@@ -1,8 +1,9 @@
 import fileinput
 import HTMLParser
 
+column = 0
 is_serbian = False
-h = HTMLParser.HTMLParser()
+htmlParser = HTMLParser.HTMLParser()
 
 for line in fileinput.input():
 	if line.startswith('<p'):
@@ -18,4 +19,4 @@ for line in fileinput.input():
 		elif line.startswith('<'):
 			pass
 		else:
-			sentence.append(h.unescape(line.split('\t')[2].decode('utf-8')))
+			sentence.append(htmlParser.unescape(line.split('\t')[column].decode('utf-8')))

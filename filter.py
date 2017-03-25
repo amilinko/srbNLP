@@ -1,12 +1,11 @@
 # This Python file uses the following encoding: utf-8
 
-import sys  
 import fileinput
 import re
 
 serbian_letters = u"AaBbVvGgDdĐđEeŽžZzIiJjKkLlMmNnOoPpRrSsTtĆćUuFfHhCcČčŠš"
 english_letters = u"QqWwYyXx"
-allowed_punctuation = u",.!?\""
+allowed_punctuation = u""
 
 def is_english (sentence):
 	count = 0
@@ -16,18 +15,8 @@ def is_english (sentence):
 			
 	return float(count)/len(sentence) > 0.2
 
-# Parse command line arguments
-if len(sys.argv)>2:
-	print "Usage: python filter.py [<filename>]"
-	sys.exit(1)
-elif len(sys.argv)<2:
-	input_data = fileinput.input();
-else:
-	with open (sys.argv[1]) as file:
-		input_data = file.read().splitlines()
-		
 # Filter line by line
-for line in input_data:
+for line in fileinput.input():
 	line = unicode(line, "utf-8")
 	line = re.sub("[^" + serbian_letters + english_letters + allowed_punctuation + " ]", "", line)
 	sentence = line.split()
