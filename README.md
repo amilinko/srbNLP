@@ -46,4 +46,8 @@ where the command line arguments are the same as they are described [here](https
 TO DO
 
 ## Vectorize
-TO DO
+This tool is used to generate vectors for each word in the input set of sentences. It is basically a wrapper around `gensim word2vec` module. To install `gensim` package, follow the instructions from this [link](https://radimrehurek.com/gensim/install.html).
+To run this tool, type:
+
+	$ python vectorize.py <InputFile> <OutputFile>
+where `InputFile` is the path to the file which contains preprocessed sentences using one (or more) of the tools described above. `OutputFile` is the name of the file where the `word2vec` model will be saved. The model will be saved as a simple text file.
