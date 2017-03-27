@@ -1,9 +1,9 @@
-"""Vectorize.py.
+"""vectorize.py
  
 Usage:
-  Vectorize [--size=<dimension>] [--min_count=<number>] [--workers=<number>] --input=<file> --output=<file>
-  Vectorize -h | --help
-  Vectorize --version
+  vectorize.py [--size=<dimension>] [--min_count=<number>] [--workers=<number>] --input=<file> --output=<file>
+  vectorize.py -h | --help
+  vectorize.py --version
  
 Options:
   --size=<dimension>     The dimension of word vector [default: 100].
