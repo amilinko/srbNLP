@@ -5,7 +5,8 @@ import re
 
 serbian_letters = u"AaBbVvGgDdĐđEeŽžZzIiJjKkLlMmNnOoPpRrSsTtĆćUuFfHhCcČčŠš"
 english_letters = u"QqWwYyXx"
-allowed_punctuation = u""
+allowed_punctuation = u".,:;\"?!"
+digits = "0123456789"
 
 def is_english (sentence):
 	count = 0
@@ -18,9 +19,9 @@ def is_english (sentence):
 # Filter line by line
 for line in fileinput.input():
 	line = unicode(line, "utf-8")
-	line = re.sub("[^" + serbian_letters + english_letters + allowed_punctuation + " ]", "", line)
+	line = re.sub("[^" + serbian_letters + english_letters + allowed_punctuation + digits + " ]", "", line)
 	sentence = line.split()
-	if len(line) > 10 and len(sentence) > 3 and len(sentence) < 128 and not is_english(sentence):
+	if len(line) > 10 and len(sentence) > 3 and not is_english(sentence):
 		print " ".join([word for word in sentence]).encode('utf-8')
         
         
