@@ -21,11 +21,14 @@ if __name__ == '__main__':
 	import urllib
 	import os
 	import sys
+	import platform
 	
 	from subprocess import call
 	
 	inputFile = arguments["<InputFile>"]
 	outputFile = arguments["<OutputFile>"]
+	
+	is_windows = True if platform.system()=="Windows" else False
 	
 	# BTagger
 	if (arguments["BTagger"]):
@@ -46,7 +49,7 @@ if __name__ == '__main__':
 			
 		# Check if predefined models for lemmatization and tagging are downloaded
 		if(not os.path.isdir(PARAM)):
-			call(["mkdir", PARAM])
+			call(["mkdir", PARAM], shell=is_windows)
 			
 		if(not os.path.isfile(LEMMA_WEIGHT)):
 			print ("Downloading lemmatisation weight file...")
@@ -65,14 +68,14 @@ if __name__ == '__main__':
 			urllib.urlretrieve ("http://clcl.unige.ch/btag/param/sr/pos.scr", POS_SCRIPT)
 			
 		if(not os.path.isdir(TMP)):
-			call(["mkdir", TMP])
+			call(["mkdir", TMP], shell=is_windows)
 			
 		# Run POS tagger
-		call("java -cp BTagger.jar bTagger/BTagger -p tmp/PosOut".split() + [inputFile,"param/pos.fea","param/pos.scr"])
+		call("java -cp BTagger.jar bTagger/BTagger -p tmp/PosOut".split() + [inputFile,"param/pos.fea","param/pos.scr"], shell=is_windows)
 		
 		# Run lemmatizer
-		call("java -cp BTagger.jar bTagger/BTagger -p tmp/LemmaOut".split() + ["tmp/PosOutTagged.txt","param/lem.fea","param/lem.scr"])
+		call("java -cp BTagger.jar bTagger/BTagger -p tmp/LemmaOut".split() + ["tmp/PosOutTagged.txt","param/lem.fea","param/lem.scr"], shell=is_windows)
 		
 		# Decode lemma tags
-		call("java  -cp BTagger.jar LCS_WDiff2L  tmp/LemmaOutTagged.txt".split() + [outputFile, "1", "3"])
+		call("java  -cp BTagger.jar LCS_WDiff2L  tmp/LemmaOutTagged.txt".split() + [outputFile, "1", "3"], shell=is_windows)
 		
