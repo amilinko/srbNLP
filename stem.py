@@ -1,7 +1,7 @@
 """stem.py
  
 Usage:
-  stem.py <StemmerID> <InputFile> <OutputFile>
+  stem.py <StemmerID> <InputFile> <OutputFile> [<StemOutput>]
   stem.py -h | --help
   stem.py --version
  
@@ -16,7 +16,7 @@ from utils.docopt import docopt
 if __name__ == '__main__':
 	
 	arguments = docopt(__doc__, version="1.0.0")
-	
+
 	from subprocess import call
 	import urllib, os, platform, fileinput
 
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 	stemmerID = arguments["<StemmerID>"]
 	inputFile = arguments["<InputFile>"]
 	outputFile = arguments["<OutputFile>"]
-	outputFileStem = outputFile + ".stem"
+	outputFileStem = outputFile + ".stem" if arguments["<StemOutput>"]==None else arguments["<StemOutput>"]
 	
 	NUM_TAG = "<NUM>"
 	
@@ -37,6 +37,7 @@ if __name__ == '__main__':
 		urllib.urlretrieve ("https://github.com/vukbatanovic/SCStemmers/releases/download/v1.0.0/SCStemmers.jar", "SCStemmers.jar")
 	
 	# Call Serbian stemmers jar from Python
+	print ("Running stemmer. Output of stemmer will be saved to " + outputFileStem + ".")
 	call(command + [stemmerID, inputFile, outputFileStem], shell=is_windows)
 
 	print ("Replacing numbers with <NUM> tags...")
