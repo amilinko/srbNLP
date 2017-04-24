@@ -5,7 +5,7 @@ import re
 
 serbian_letters = u"AaBbVvGgDdĐđEeŽžZzIiJjKkLlMmNnOoPpRrSsTtĆćUuFfHhCcČčŠš"
 english_letters = u"QqWwYyXx"
-allowed_punctuation = u".,:;\"?!"
+allowed_punctuation = u".,:;\"?!-"
 digits = "0123456789"
 
 def is_english (sentence):
