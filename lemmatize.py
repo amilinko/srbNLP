@@ -27,6 +27,9 @@ if __name__ == '__main__':
 	import sys
 	
 	from subprocess import call
+	from utils.common import parseDecodedLemmas
+	
+	NUM_TAG = "<NUM>"
 	
 	inputFile = arguments["<InputFile>"]
 	outputFile = arguments["<OutputFile>"]
@@ -63,7 +66,7 @@ if __name__ == '__main__':
 		call("java -cp BTagger.jar bTagger/BTagger -p tmp/LemmaOut".split() + ["tmp/PosOutTagged.txt",LEMMA_WEIGHT,LEMMA_SCRIPT], shell=is_windows)
 		
 		# Decode lemma tags
-		decodeBTaggerLemmaTags ("tmp/LemmaOutTagged.txt", outputFile)
+		decodeBTaggerLemmaTags ("tmp/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
 	
 	# CSTLemma
 	if (arguments["CSTLemma"]):
@@ -76,5 +79,8 @@ if __name__ == '__main__':
 	# ReLDI
 	if (arguments["ReLDI"]):
 		print arguments["<SrWaC_xml>"]
+		
+	# Parse decoded lemmatized input and prepare for vectorization
+	parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile)
 		
 		
