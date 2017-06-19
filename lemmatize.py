@@ -2,6 +2,8 @@
  
 Usage:
   lemmatize.py BTagger <InputFile> <OutputFile> <PoS_scr> <PoS_fea> <Lem_scr> <Lem_fea>
+  lemmatize.py CSTLemma <InputFile> <OutputFile>
+  lemmatize.py ReLDI <SrWaC_xml>...
   lemmatize.py -h | --help
   lemmatize.py --version
  
@@ -22,6 +24,7 @@ if __name__ == '__main__':
 	import urllib
 	import os
 	import platform
+	import sys
 	
 	from subprocess import call
 	
@@ -61,4 +64,17 @@ if __name__ == '__main__':
 		
 		# Decode lemma tags
 		decodeBTaggerLemmaTags ("tmp/LemmaOutTagged.txt", outputFile)
+	
+	# CSTLemma
+	if (arguments["CSTLemma"]):
+		if (is_windows):
+			print "This lemmatizer can only be run on Linux system! Aborting!"
+			sys.exit(-1)
+		else:
+			print "CSTLemma"
+			
+	# ReLDI
+	if (arguments["ReLDI"]):
+		print arguments["<SrWaC_xml>"]
+		
 		
