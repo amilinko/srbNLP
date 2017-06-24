@@ -22,37 +22,37 @@ Options:
 from utils.docopt import docopt
 
 class Sentences(object):
-	def __init__(self, filename):
-		self.filename = filename
+    def __init__(self, filename):
+        self.filename = filename
  
-	def __iter__(self):
-		for line in open(self.filename):
-			yield line.split()
+    def __iter__(self):
+        for line in open(self.filename):
+            yield line.split()
 
 if __name__ == '__main__':
 
-	import gensim, logging
-	
-	# Parse command line arguments
-	arguments = docopt(__doc__, version="1.0.0")
+    import gensim, logging
+    
+    # Parse command line arguments
+    arguments = docopt(__doc__, version="1.0.0")
 
-	inputFile = arguments["<InputFile>"]
-	outputFile = arguments['<OutputFile>']
-	_size = int(arguments['--size'])
-	_min_count = int(arguments['--min_count'])
-	_workers = int(arguments['--workers'])
-	_sg = int(arguments['--sg'])
-	_window = int(arguments['--window'])
-	_cbow_mean = int(arguments['--cbow_mean'])
-	_hs = int(arguments['--hs'])
-	_negative = int(arguments['--negative'])
-	
-	# Set up logging and message format
-	logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-	
-	# Vectorize input sentences
-	sentences = Sentences(inputFile)
-	model = gensim.models.Word2Vec(sentences, size=_size, min_count=_min_count, workers=_workers, sg=_sg, window=_window, cbow_mean=_cbow_mean, hs=_hs, negative=_negative)
+    inputFile = arguments["<InputFile>"]
+    outputFile = arguments['<OutputFile>']
+    _size = int(arguments['--size'])
+    _min_count = int(arguments['--min_count'])
+    _workers = int(arguments['--workers'])
+    _sg = int(arguments['--sg'])
+    _window = int(arguments['--window'])
+    _cbow_mean = int(arguments['--cbow_mean'])
+    _hs = int(arguments['--hs'])
+    _negative = int(arguments['--negative'])
+    
+    # Set up logging and message format
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+    
+    # Vectorize input sentences
+    sentences = Sentences(inputFile)
+    model = gensim.models.Word2Vec(sentences, size=_size, min_count=_min_count, workers=_workers, sg=_sg, window=_window, cbow_mean=_cbow_mean, hs=_hs, negative=_negative)
 
-	# Save model in a txt format
-	model.wv.save_word2vec_format(outputFile, binary=False)
+    # Save model in a txt format
+    model.wv.save_word2vec_format(outputFile, binary=False)

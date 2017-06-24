@@ -17,70 +17,70 @@ from utils.docopt import docopt
 
 
 if __name__ == '__main__':
-	
-	# Parse command line arguments
-	arguments = docopt(__doc__, version="1.0.0")
-	
-	import urllib
-	import os
-	import platform
-	import sys
-	
-	from subprocess import call
-	from utils.common import parseDecodedLemmas
-	
-	NUM_TAG = "<NUM>"
-	
-	inputFile = arguments["<InputFile>"]
-	outputFile = arguments["<OutputFile>"]
-	
-	is_windows = True if platform.system()=="Windows" else False
-	
-	# BTagger
-	if (arguments["BTagger"]):
-		
-		from utils.common import decodeBTaggerLemmaTags
-		
-		# Constants
-		BTAGGER = "BTagger.jar"
-		TMP = "tmp"
-		
-		# BTagger arguments
-		LEMMA_WEIGHT = arguments["<Lem_fea>"]
-		LEMMA_SCRIPT = arguments["<Lem_scr>"]
-		POS_WEIGHT = arguments["<PoS_fea>"]
-		POS_SCRIPT = arguments["<PoS_scr>"]
-		
-		# Check if Btagger.jar exists in the current directory
-		if(not os.path.isfile(BTAGGER)):
-			print ("Downloading BTagger.jar...")
-			urllib.urlretrieve ("http://clcl.unige.ch/btag/BTagger.jar", BTAGGER)
-						
-		if(not os.path.isdir(TMP)):
-			call(["mkdir", TMP], shell=is_windows)
-			
-		# Run POS tagger
-		call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/PosOut").split() + [inputFile,POS_WEIGHT,POS_SCRIPT], shell=is_windows)
-		
-		# Run lemmatizer
-		call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/LemmaOut").split() + [TMP + "/PosOutTagged.txt",LEMMA_WEIGHT,LEMMA_SCRIPT], shell=is_windows)
-		
-		# Decode lemma tags
-		decodeBTaggerLemmaTags (TMP + "/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
-	
-	# CSTLemma
-	if (arguments["CSTLemma"]):
-		if (is_windows):
-			print "This lemmatizer can only be run on Linux system! Aborting!"
-			sys.exit(-1)
-		else:
-			print "CSTLemma"
-			
-	# ReLDI
-	if (arguments["ReLDI"]):
-		print arguments["<SrWaC_xml>"]
-		
-	# Parse decoded lemmatized input and prepare for vectorization
-	parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile)
-		
-		
+    
+    # Parse command line arguments
+    arguments = docopt(__doc__, version="1.0.0")
+    
+    import urllib
+    import os
+    import platform
+    import sys
+    
+    from subprocess import call
+    from utils.common import parseDecodedLemmas
+    
+    NUM_TAG = "<NUM>"
+    
+    inputFile = arguments["<InputFile>"]
+    outputFile = arguments["<OutputFile>"]
+    
+    is_windows = True if platform.system()=="Windows" else False
+    
+    # BTagger
+    if (arguments["BTagger"]):
+        
+        from utils.common import decodeBTaggerLemmaTags
+        
+        # Constants
+        BTAGGER = "BTagger.jar"
+        TMP = "tmp"
+        
+        # BTagger arguments
+        LEMMA_WEIGHT = arguments["<Lem_fea>"]
+        LEMMA_SCRIPT = arguments["<Lem_scr>"]
+        POS_WEIGHT = arguments["<PoS_fea>"]
+        POS_SCRIPT = arguments["<PoS_scr>"]
+        
+        # Check if Btagger.jar exists in the current directory
+        if(not os.path.isfile(BTAGGER)):
+            print ("Downloading BTagger.jar...")
+            urllib.urlretrieve ("http://clcl.unige.ch/btag/BTagger.jar", BTAGGER)
+                        
+        if(not os.path.isdir(TMP)):
+            call(["mkdir", TMP], shell=is_windows)
+            
+        # Run POS tagger
+        call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/PosOut").split() + [inputFile,POS_WEIGHT,POS_SCRIPT], shell=is_windows)
+        
+        # Run lemmatizer
+        call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/LemmaOut").split() + [TMP + "/PosOutTagged.txt",LEMMA_WEIGHT,LEMMA_SCRIPT], shell=is_windows)
+        
+        # Decode lemma tags
+        decodeBTaggerLemmaTags (TMP + "/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
+    
+    # CSTLemma
+    if (arguments["CSTLemma"]):
+        if (is_windows):
+            print "This lemmatizer can only be run on Linux system! Aborting!"
+            sys.exit(-1)
+        else:
+            print "CSTLemma"
+            
+    # ReLDI
+    if (arguments["ReLDI"]):
+        print arguments["<SrWaC_xml>"]
+        
+    # Parse decoded lemmatized input and prepare for vectorization
+    parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile)
+        
+        
