@@ -27,19 +27,18 @@ def is_english (sentence):
             
     return float(count)/len(sentence) > 0.2
 
-def regex_filter (input_text, regex, tokenized):
+def regex_filter (input_text, regex):
     for text in input_text:
         words = text.splitlines()
         line = " ".join([word.split('\t')[0] for word in words])
-        line = unicode(line, "utf-8")
-        line = re.sub(regex, "", line)
+        line = apply_regex(line, regex)
         sentence = line.split()
         if acceptable(line, sentence):
-            if tokenized:
                 print "\n".join([word for word in sentence]).encode('utf-8')
                 print ""
-            else:
-                print " ".join([word for word in sentence]).encode('utf-8')
+
+def apply_regex (text, regex):
+    return re.sub(regex, "", unicode(text, "utf-8"))
 
 def acceptable(line, sentence):
     return len(line) > 10 and len(sentence) > 3 and not is_english(sentence)
@@ -69,15 +68,11 @@ if __name__ == '__main__':
     with open (inputFile, "r") as fin:
         text = fin.read()
     
-    # Filtering for stemmers
-    if stem:
-        regex_filter(text.split("\n\n"), regex, False)
+    # Filtering for stemmers and lemmatizers
+    if stem or lem:
+        regex_filter(text.split("\n\n"), regex)
     
-    # Filtering for lemmatizers
-    if lem:
-        regex_filter(text.split("\n\n"), regex, True)
-    
-    
+    # Filtering after ReLDI lemmatization
     if reldi:
         for txt in text.split("\n\n"):
             sentence = []
@@ -85,10 +80,8 @@ if __name__ == '__main__':
             words = txt.splitlines()
             for word in words:
                 original, POS, lemma = word.split("\t")
-                original = unicode(original, "utf-8")
-                original = re.sub(regex, "", original)
-                lemma = unicode(lemma, "utf-8")
-                lemma = re.sub(regex, "", lemma)
+                original = apply_regex(original, regex)
+                lemma = apply_regex(lemma, regex)
                 if original:
                     sentence.append(original)
                     output.append(original + "\t" + POS + "\t" +lemma)
