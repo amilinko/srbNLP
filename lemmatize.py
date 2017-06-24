@@ -60,13 +60,13 @@ if __name__ == '__main__':
 			call(["mkdir", TMP], shell=is_windows)
 			
 		# Run POS tagger
-		call("java -cp BTagger.jar bTagger/BTagger -p tmp/PosOut".split() + [inputFile,POS_WEIGHT,POS_SCRIPT], shell=is_windows)
+		call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/PosOut").split() + [inputFile,POS_WEIGHT,POS_SCRIPT], shell=is_windows)
 		
 		# Run lemmatizer
-		call("java -cp BTagger.jar bTagger/BTagger -p tmp/LemmaOut".split() + ["tmp/PosOutTagged.txt",LEMMA_WEIGHT,LEMMA_SCRIPT], shell=is_windows)
+		call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/LemmaOut").split() + [TMP + "/PosOutTagged.txt",LEMMA_WEIGHT,LEMMA_SCRIPT], shell=is_windows)
 		
 		# Decode lemma tags
-		decodeBTaggerLemmaTags ("tmp/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
+		decodeBTaggerLemmaTags (TMP + "/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
 	
 	# CSTLemma
 	if (arguments["CSTLemma"]):
