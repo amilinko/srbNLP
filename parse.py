@@ -11,14 +11,15 @@ for line in fileinput.input():
 		is_serbian = False
 	elif is_serbian:
 		if line == '<s>\n':
-			sentence = []
+			empty = True
 		elif line == '</s>\n':
-			if sentence:
-				print " ".join(sentence).encode('utf-8')
+			if not empty:
+				print ""
 		elif line.startswith('<'):
 			pass
 		else:
+			empty = False
 			decoded = htmlParser.unescape(line.decode('utf-8'))
 			original, diacritic, lemma, pos = decoded.split('\t')
-			word = lemma[0] + diacritic[1:]
-			sentence.append(word)
+			word = lemma[0] + diacritic[1:] + "\t" + pos.rstrip() + "\t" + lemma
+			print word.encode('utf-8')
