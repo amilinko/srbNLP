@@ -27,16 +27,28 @@ def is_english (sentence):
             
     return float(count)/len(sentence) > 0.2
 
-def regex_filter (input_text, regex):
-    for text in input_text:
-        words = text.splitlines()
-        line = " ".join([word.split('\t')[0] for word in words])
-        line = apply_regex(line, regex)
-        sentence = line.split()
-        if acceptable(line, sentence):
-                print "\n".join([word for word in sentence]).encode('utf-8')
-                print ""
-
+def regex_filter (input_text, regex, reldi):
+    for paragraph in input_text.split("\n\n"):
+        sentence = []
+        output = []
+        words = paragraph.splitlines()
+        for word in words:
+            original, POS, lemma = word.split("\t")
+            original = apply_regex(original, regex)
+            if original:
+                sentence.append(original)
+                if reldi:
+                    lemma = apply_regex(lemma, regex)
+                    output.append(original + "\t" + POS + "\t" +lemma)
+                
+        line = " ".join([w for w in sentence])
+        if acceptable(line,sentence):
+            if reldi:
+                print "\n".join([o for o in output]).encode('utf-8')  
+            else:
+                print "\n".join([s for s in sentence]).encode('utf-8')
+            print ""
+            
 def apply_regex (text, regex):
     return re.sub(regex, "", unicode(text, "utf-8"))
 
@@ -68,26 +80,6 @@ if __name__ == '__main__':
     with open (inputFile, "r") as fin:
         text = fin.read()
     
-    # Filtering for stemmers and lemmatizers
-    if stem or lem:
-        regex_filter(text.split("\n\n"), regex)
-    
-    # Filtering after ReLDI lemmatization
-    if reldi:
-        for txt in text.split("\n\n"):
-            sentence = []
-            output = []
-            words = txt.splitlines()
-            for word in words:
-                original, POS, lemma = word.split("\t")
-                original = apply_regex(original, regex)
-                lemma = apply_regex(lemma, regex)
-                if original:
-                    sentence.append(original)
-                    output.append(original + "\t" + POS + "\t" +lemma)
-            
-            line = " ".join([w for w in sentence])
-            if acceptable(line,sentence):
-                print "\n".join([o for o in output]).encode('utf-8')
-                print ""
+    # Apply filter
+    regex_filter(text, regex, reldi)
                 
