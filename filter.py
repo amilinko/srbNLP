@@ -27,6 +27,20 @@ def is_english (sentence):
 			
 	return float(count)/len(sentence) > 0.2
 
+def regex_filter (input_text, regex, tokenized):
+	for text in input_text:
+		words = text.splitlines()
+		line = " ".join([word.split('\t')[0] for word in words])
+		line = unicode(line, "utf-8")
+		line = re.sub(regex, "", line)
+		sentence = line.split()
+		if len(line) > 10 and len(sentence) > 3 and not is_english(sentence):
+			if tokenized:
+				for word in sentence:
+					print word.encode('utf-8')
+				print ""
+			else:
+				print " ".join([word for word in sentence]).encode('utf-8')
 
 if __name__ == '__main__':
 	
@@ -41,39 +55,23 @@ if __name__ == '__main__':
 	# Letters, digits and characters used in filtering
 	serbian_letters = u"AaBbVvGgDdĐđEeŽžZzIiJjKkLlMmNnOoPpRrSsTtĆćUuFfHhCcČčŠš"
 	english_letters = u"QqWwYyXx"
-	allowed_punctuation_lem = u".,:;\"\'?!-"
+	allowed_punctuation_lem = u".,:;\"\'?!\-"
 	allowed_punctuation_stem = u"\'\-"
 	digits = "0123456789"
 
 	# Allowed punctuation characters differ when lemmatizing and stemming
 	allowed_punctuation = allowed_punctuation_lem if (lem or reldi) else allowed_punctuation_stem
-
+	regex = "[^" + serbian_letters + english_letters + allowed_punctuation + digits + " ]"
+	
 	# Reading parsed corpus
 	with open (inputFile, "r") as fin:
 		text = fin.read()
 	
 	# Filtering for stemmers
 	if stem:
-		for l in text.split("\n\n"):
-			words = l.splitlines()
-			line = " ".join([word.split('\t')[0] for word in words])
-			line = unicode(line, "utf-8")
-			line = re.sub("[^" + serbian_letters + english_letters + allowed_punctuation + digits + " ]", "", line)
-			sentence = line.split()
-			if len(line) > 10 and len(sentence) > 3 and not is_english(sentence):
-				print " ".join([word for word in sentence]).encode('utf-8')
+		regex_filter(text.split("\n\n"), regex, False)
 	
 	# Filtering for lemmatizers
 	if lem:
-		for l in text.split("\n\n"):
-			words = l.splitlines()
-			line = " ".join([word.split('\t')[0] for word in words])
-			line = unicode(line, "utf-8")
-			line = re.sub("[^" + serbian_letters + english_letters + allowed_punctuation + digits + " ]", "", line)
-			sentence = line.split()
-			if len(line) > 10 and len(sentence) > 3 and not is_english(sentence):
-				for word in sentence:
-					print word.encode('utf-8')
-				print ""
-			
+		regex_filter(text.split("\n\n"), regex, True)
         
