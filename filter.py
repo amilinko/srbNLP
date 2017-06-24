@@ -34,14 +34,16 @@ def regex_filter (input_text, regex, tokenized):
 		line = unicode(line, "utf-8")
 		line = re.sub(regex, "", line)
 		sentence = line.split()
-		if len(line) > 10 and len(sentence) > 3 and not is_english(sentence):
+		if acceptable(line, sentence):
 			if tokenized:
-				for word in sentence:
-					print word.encode('utf-8')
+				print "\n".join([word for word in sentence]).encode('utf-8')
 				print ""
 			else:
 				print " ".join([word for word in sentence]).encode('utf-8')
 
+def acceptable(line, sentence):
+	return len(line) > 10 and len(sentence) > 3 and not is_english(sentence)
+	
 if __name__ == '__main__':
 	
 	# Parse command line arguments
@@ -74,4 +76,25 @@ if __name__ == '__main__':
 	# Filtering for lemmatizers
 	if lem:
 		regex_filter(text.split("\n\n"), regex, True)
-        
+	
+	
+	if reldi:
+		for txt in text.split("\n\n"):
+			sentence = []
+			output = []
+			words = txt.splitlines()
+			for word in words:
+				original, POS, lemma = word.split("\t")
+				original = unicode(original, "utf-8")
+				original = re.sub(regex, "", original)
+				lemma = unicode(lemma, "utf-8")
+				lemma = re.sub(regex, "", lemma)
+				if original:
+					sentence.append(original)
+					output.append(original + "\t" + POS + "\t" +lemma)
+			
+			line = " ".join([w for w in sentence])
+			if acceptable(line,sentence):
+				print "\n".join([o for o in output]).encode('utf-8')
+				print ""
+				
