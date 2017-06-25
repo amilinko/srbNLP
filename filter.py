@@ -27,7 +27,8 @@ def is_english (sentence):
             
     return float(count)/len(sentence) > 0.2
 
-def regex_filter (input_text, regex, reldi):
+def regex_filter (input_text, regex):
+    global stem, lem, reldi
     for paragraph in input_text.split("\n\n"):
         sentence = []
         output = []
@@ -44,10 +45,13 @@ def regex_filter (input_text, regex, reldi):
         line = " ".join([w for w in sentence])
         if acceptable(line,sentence):
             if reldi:
-                print "\n".join([o for o in output]).encode('utf-8')  
+                print "\n".join([o for o in output]).encode('utf-8')
+                print ""
+            elif stem:
+                print " ".join([s for s in sentence]).encode('utf-8')
             else:
                 print "\n".join([s for s in sentence]).encode('utf-8')
-            print ""
+                print ""
             
 def apply_regex (text, regex):
     return re.sub(regex, "", unicode(text, "utf-8"))
@@ -81,5 +85,5 @@ if __name__ == '__main__':
         text = fin.read()
     
     # Apply filter
-    regex_filter(text, regex, reldi)
+    regex_filter(text, regex)
                 
