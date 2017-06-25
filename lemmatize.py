@@ -27,9 +27,8 @@ if __name__ == '__main__':
     import sys
     
     from subprocess import call
-    
-    NUM_TAG = "<NUM>"
-    
+    from utils.common import parseDecodedLemmas
+     
     inputFile = arguments["<InputFile>"]
     outputFile = arguments["<OutputFile>"]
     
@@ -46,7 +45,7 @@ if __name__ == '__main__':
     # BTagger
     if (arguments["BTagger"]):
         
-        from utils.common import decodeBTaggerLemmaTags, parseDecodedLemmas
+        from utils.common import decodeBTaggerLemmaTags, filter_btagger
         
         # BTagger arguments
         LEMMA_WEIGHT = arguments["<Lem_fea>"]
@@ -69,7 +68,7 @@ if __name__ == '__main__':
         decodeBTaggerLemmaTags (TMP + "/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
         
         # Parse decoded lemmatized input and prepare for vectorization
-        parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile)
+        parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile, filter_btagger)
     
     # CSTLemma
     if (arguments["CSTLemma"]):
@@ -82,8 +81,7 @@ if __name__ == '__main__':
     # ReLDI
     if (arguments["ReLDI"]):
         
-        from utils.common import parseDecodedLemmasReLDI
-        
-        parseDecodedLemmasReLDI(inputFile, outputFile)
+        from utils.common import filter_reldi
+        parseDecodedLemmas(inputFile, outputFile, filter_reldi)
         
         

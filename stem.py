@@ -19,14 +19,13 @@ if __name__ == '__main__':
 
     from subprocess import call
     import urllib, os, platform, fileinput
+    from utils.common import NUM_TAG
 
     # Parse command line arguments
     stemmerID = arguments["<StemmerID>"]
     inputFile = arguments["<InputFile>"]
     outputFile = arguments["<OutputFile>"]
     outputFileStem = outputFile + ".stem" if arguments["<StemOutput>"]==None else arguments["<StemOutput>"]
-    
-    NUM_TAG = "<NUM>"
     
     is_windows = True if platform.system()=="Windows" else False
     command = "java -jar SCStemmers.jar".split()

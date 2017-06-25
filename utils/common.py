@@ -1,5 +1,7 @@
 import codecs
 
+NUM_TAG = "<NUM>"
+
 def tokenize (inputFile, outputFile):
     
     with open (inputFile, "r") as fin:
@@ -56,32 +58,33 @@ def decodeBTaggerLemmaTags (inFileName, outFileName):
             
     inFile.close()
     outFile.close()
+
+def filter_btagger(word):
+    original, POS, lemma = word.split('\t')
+    if (POS == "Mc" and lemma.isdigit()):
+        return NUM_TAG
+    elif POS == "#":
+        return ""
+    else:
+        return lemma
+
+def filter_reldi(word):
+    original, POS, lemma = word.split('\t')
+    if POS == "Mdc":
+        return NUM_TAG
+    elif POS == "Z":
+        return ""
+    else:
+        return lemma
     
-def parseDecodedLemmas (decodedLemmas, output):
+def parseDecodedLemmas (decodedLemmas, outputFile, filter_function):
     
     with open (decodedLemmas, "r") as fin:
         decoded = fin.read()
     
-    sentences = []
+    fout = open(outputFile,"w")
     for line in decoded.split("\n\n"):
         words = line.splitlines()
-        sentences.append(" ".join([word.split('\t')[2] for word in words]))
-        
-    lines = [line.replace('\n', ' ') for line in decoded.split("\n\n")]
-    with open (output, "w") as fout:
-        fout.write('\n'.join(sentences))
-        
-def parseDecodedLemmasReLDI (decodedLemmas, output):
-    with open (decodedLemmas, "r") as fin:
-        decoded = fin.read()
-    
-    sentences = []
-    for line in decoded.split("\n\n"):
-        words = line.splitlines()
-        sentences.append(" ".join([word.split('\t')[2] for word in words]))
-        
-    lines = [line.replace('\n', ' ') for line in decoded.split("\n\n")]
-    with open (output, "w") as fout:
-        fout.write('\n'.join(sentences))
-        
-    
+        fout.write(" ".join([filter_function(word) for word in words]))
+        fout.write("\n")
+    fout.close()        
