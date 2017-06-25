@@ -3,7 +3,7 @@
 Usage:
   lemmatize.py BTagger <InputFile> <OutputFile> <PoS_scr> <PoS_fea> <Lem_scr> <Lem_fea>
   lemmatize.py CSTLemma <InputFile> <OutputFile>
-  lemmatize.py ReLDI <SrWaC_xml>...
+  lemmatize.py ReLDI <InputFile> <OutputFile>
   lemmatize.py -h | --help
   lemmatize.py --version
  
@@ -27,7 +27,6 @@ if __name__ == '__main__':
     import sys
     
     from subprocess import call
-    from utils.common import parseDecodedLemmas
     
     NUM_TAG = "<NUM>"
     
@@ -36,14 +35,18 @@ if __name__ == '__main__':
     
     is_windows = True if platform.system()=="Windows" else False
     
+    # Constants
+    BTAGGER = "BTagger.jar"
+    TMP = "tmp"
+        
+    # Create TMP directory for storing intermediate results
+    if(not os.path.isdir(TMP)):
+            call(["mkdir", TMP], shell=is_windows)
+    
     # BTagger
     if (arguments["BTagger"]):
         
-        from utils.common import decodeBTaggerLemmaTags
-        
-        # Constants
-        BTAGGER = "BTagger.jar"
-        TMP = "tmp"
+        from utils.common import decodeBTaggerLemmaTags, parseDecodedLemmas
         
         # BTagger arguments
         LEMMA_WEIGHT = arguments["<Lem_fea>"]
@@ -55,9 +58,6 @@ if __name__ == '__main__':
         if(not os.path.isfile(BTAGGER)):
             print ("Downloading BTagger.jar...")
             urllib.urlretrieve ("http://clcl.unige.ch/btag/BTagger.jar", BTAGGER)
-                        
-        if(not os.path.isdir(TMP)):
-            call(["mkdir", TMP], shell=is_windows)
             
         # Run POS tagger
         call(("java -cp BTagger.jar bTagger/BTagger -p " + TMP + "/PosOut").split() + [inputFile,POS_WEIGHT,POS_SCRIPT], shell=is_windows)
@@ -67,6 +67,9 @@ if __name__ == '__main__':
         
         # Decode lemma tags
         decodeBTaggerLemmaTags (TMP + "/LemmaOutTagged.txt", TMP + "/decodedLemmas.txt")
+        
+        # Parse decoded lemmatized input and prepare for vectorization
+        parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile)
     
     # CSTLemma
     if (arguments["CSTLemma"]):
@@ -78,9 +81,9 @@ if __name__ == '__main__':
             
     # ReLDI
     if (arguments["ReLDI"]):
-        print arguments["<SrWaC_xml>"]
         
-    # Parse decoded lemmatized input and prepare for vectorization
-    parseDecodedLemmas(TMP + "/decodedLemmas.txt", outputFile)
+        from utils.common import parseDecodedLemmasReLDI
+        
+        parseDecodedLemmasReLDI(inputFile, outputFile)
         
         

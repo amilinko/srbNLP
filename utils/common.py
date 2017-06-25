@@ -71,4 +71,17 @@ def parseDecodedLemmas (decodedLemmas, output):
     with open (output, "w") as fout:
         fout.write('\n'.join(sentences))
         
+def parseDecodedLemmasReLDI (decodedLemmas, output):
+    with open (decodedLemmas, "r") as fin:
+        decoded = fin.read()
+    
+    sentences = []
+    for line in decoded.split("\n\n"):
+        words = line.splitlines()
+        sentences.append(" ".join([word.split('\t')[2] for word in words]))
+        
+    lines = [line.replace('\n', ' ') for line in decoded.split("\n\n")]
+    with open (output, "w") as fout:
+        fout.write('\n'.join(sentences))
+        
     
