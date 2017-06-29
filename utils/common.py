@@ -70,7 +70,7 @@ def filter_btagger(word):
 
 def filter_reldi(word):
     original, POS, lemma = word.split('\t')
-    if POS == "Mdc":
+    if POS.startswith("Md"):
         return NUM_TAG
     elif POS == "Z":
         return ""
