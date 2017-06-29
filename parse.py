@@ -21,5 +21,5 @@ for line in fileinput.input():
             empty = False
             decoded = htmlParser.unescape(line.decode('utf-8'))
             original, diacritic, lemma, pos = decoded.split('\t')
-            word = lemma[0] + diacritic[1:] + "\t" + pos.rstrip() + "\t" + lemma
+            word = diacritic[0].upper() + diacritic[1:] + "\t" + pos.rstrip() + "\t" + lemma if lemma[0].isupper() else diacritic + "\t" + pos.rstrip() + "\t" + lemma
             print word.encode('utf-8')
