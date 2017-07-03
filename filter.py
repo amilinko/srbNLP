@@ -19,10 +19,18 @@ Options:
 import re
 from utils.docopt import docopt
 
+en_stop_words = [
+    "of", "is", "so", "the", "for", "it", "as", "an", "when", "were", "was", 
+    "who", "are", "am", "by", "this", "but", "or", "and", "be", "he", "her", 
+    "him", "over", "in", "you", "she", "we", "why", "what", "how", "not",
+    "that", "my", "your", "hers", "one", "did", "does", "there", "here",
+    "has", "once", "because", "about", "must", "will", "shall", "should",
+    "may", "can", "could", "might", "whom", "whose", "up", "over"]
+
 def is_english (sentence):
     count = 0
     for word in sentence:
-        if len(set(word).intersection(english_letters)) > 0 :
+        if len(set(word).intersection(english_letters)) > 0 or (word in en_stop_words):
             count = count + 1
             
     return float(count)/len(sentence) > 0.2
@@ -42,8 +50,7 @@ def regex_filter (input_text, regex):
                     lemma = apply_regex(lemma, regex)
                     output.append(original + "\t" + POS + "\t" +lemma)
                 
-        line = " ".join([w for w in sentence])
-        if acceptable(line,sentence):
+        if acceptable(sentence):
             if reldi:
                 print "\n".join([o for o in output]).encode('utf-8')
                 print ""
@@ -56,8 +63,8 @@ def regex_filter (input_text, regex):
 def apply_regex (text, regex):
     return re.sub(regex, "", unicode(text, "utf-8"))
 
-def acceptable(line, sentence):
-    return len(line) > 10 and len(sentence) > 3 and not is_english(sentence)
+def acceptable(sentence):
+    return len(sentence) > 0 and not is_english(sentence)
     
 if __name__ == '__main__':
     

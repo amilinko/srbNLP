@@ -50,8 +50,8 @@ def decodeBTaggerLemmaTags (inFileName, outFileName):
                 word = word[0:len(word)-int(tag_remove)]
                 if len(tagparts[1]) >= 1:
                     word = word + tag_add
-                outFile.write(words[0] + '\t' + words[1] + '\t' + word)
-                outFile.write('\n')
+            outFile.write(words[0] + '\t' + words[1] + '\t' + word)
+            outFile.write('\n')
         
         if line == '\n':
             outFile.write('\n')
