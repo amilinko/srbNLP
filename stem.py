@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     from subprocess import call
     import urllib, os, platform, fileinput
-    from utils.common import NUM_TAG
+    from utils.common import NUM_TAG, regexNumber, isNumber
 
     # Parse command line arguments
     stemmerID = arguments["<StemmerID>"]
@@ -40,9 +40,10 @@ if __name__ == '__main__':
     call(command + [stemmerID, inputFile, outputFileStem], shell=is_windows)
 
     print ("Replacing numbers with <NUM> tags...")
+    regex = regexNumber()
     output = open(outputFile, "w")
     for line in fileinput.input(outputFileStem):
-        sentence = [NUM_TAG if word.isdigit() else word for word in line.split()]
+        sentence = [NUM_TAG if isNumber(regex, word) else word for word in line.split()]
         output.write(" ".join(sentence))
         output.write("\n")
         

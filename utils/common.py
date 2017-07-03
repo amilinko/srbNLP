@@ -1,4 +1,5 @@
 import codecs
+import re
 
 NUM_TAG = "<NUM>"
 
@@ -23,7 +24,13 @@ def glue (inputFile, outputFile):
     
     with open (outputFile, "w") as fout:
         fout.write('\n'.join(lines))
-    
+
+def regexNumber():
+    return re.compile(r"^\d*[.,:\-]?\d*[.,:\-]?\d*$")
+
+def isNumber (regex, word):
+    return True if regex.match(word) else False
+
 def decodeBTaggerLemmaTags (inFileName, outFileName):
     
     inFile = codecs.open(inFileName,'r','utf-8')
