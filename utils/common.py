@@ -2,6 +2,7 @@ import codecs
 import re
 
 NUM_TAG = "<NUM>"
+REGEX_NUM = re.compile(r"^\d*[.,:\-]?\d*[.,:\-]?\d*$")
 
 def tokenize (inputFile, outputFile):
     
@@ -25,11 +26,8 @@ def glue (inputFile, outputFile):
     with open (outputFile, "w") as fout:
         fout.write('\n'.join(lines))
 
-def regexNumber():
-    return re.compile(r"^\d*[.,:\-]?\d*[.,:\-]?\d*$")
-
-def isNumber (regex, word):
-    return True if regex.match(word) else False
+def isNumber (word):
+    return True if REGEX_NUM.match(word) else False
 
 def decodeBTaggerLemmaTags (inFileName, outFileName):
     
@@ -68,7 +66,7 @@ def decodeBTaggerLemmaTags (inFileName, outFileName):
 
 def filter_btagger(word):
     original, POS, lemma = word.split('\t')
-    if (POS == "Mc" and lemma.isdigit()):
+    if (POS == "Mc" and isNumber(lemma)):
         return NUM_TAG
     elif POS == "#":
         return ""
