@@ -1,8 +1,14 @@
 import codecs
 import re
 
+# Regex for numbers, dates, scores, etc.
 NUM_TAG = "<NUM>"
-REGEX_NUM = re.compile(r"^\d*[.,:\-]?\d*[.,:\-]?\d*$")
+REGEX_NUM = re.compile(r"^\d*[.,:\-]?\d*[.,:\-]?\d*[.,:\-]?$")
+
+# Regex for URLs
+URL_TAG = "<URL>"
+REGEX_URL = re.compile(r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")
+
 
 def tokenize (inputFile, outputFile):
     
@@ -28,6 +34,9 @@ def glue (inputFile, outputFile):
 
 def isNumber (word):
     return True if REGEX_NUM.match(word) else False
+
+def isURL (word):
+    return True if REGEX_URL.match(word) else False
 
 def decodeBTaggerLemmaTags (inFileName, outFileName):
     
