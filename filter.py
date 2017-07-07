@@ -18,6 +18,7 @@ Options:
 
 import re
 from utils.docopt import docopt
+from utils.common import isNumber, isURL, NUM_TAG, URL_TAG
 
 en_stop_words = [
     "of", "is", "so", "the", "for", "it", "as", "an", "when", "were", "was", 
@@ -37,19 +38,35 @@ def is_english (sentence):
 
 def regex_filter (input_text, regex):
     global stem, lem, reldi
+    
     for paragraph in input_text.split("\n\n"):
         sentence = []
         output = []
         words = paragraph.splitlines()
         for word in words:
             original, POS, lemma = word.split("\t")
-            original = apply_regex(original, regex)
+            
+            # Stemmer replacing tags and filtering
+            if stem:
+                if isNumber(original):
+                    original = NUM_TAG
+                elif isURL(original):
+                    original = URL_TAG
+                else:
+                    original = apply_regex(original, regex)
+            
+            # Lemmatizer filtering
+            else:
+                original = apply_regex(original, regex)
+            
+            # Appending words to create sentence
             if original:
                 sentence.append(original)
                 if reldi:
                     lemma = apply_regex(lemma, regex)
                     output.append(original + "\t" + POS + "\t" +lemma)
-                
+        
+        # Pring out the result
         if acceptable(sentence):
             if reldi:
                 print "\n".join([o for o in output]).encode('utf-8')
