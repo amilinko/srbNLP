@@ -9,7 +9,6 @@ REGEX_NUM = re.compile(r"^\d+[.,:\-]?\d*[.,:\-]?\d*[.,:\-]?$")
 URL_TAG = "<URL>"
 REGEX_URL = re.compile(r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")
 
-
 def tokenize (inputFile, outputFile):
     
     with open (inputFile, "r") as fin:

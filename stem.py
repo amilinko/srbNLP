@@ -25,7 +25,6 @@ if __name__ == '__main__':
     stemmerID = arguments["<StemmerID>"]
     inputFile = arguments["<InputFile>"]
     outputFile = arguments["<OutputFile>"]
-    outputFileStem = outputFile + ".stem" if arguments["<StemOutput>"]==None else arguments["<StemOutput>"]
     
     is_windows = True if platform.system()=="Windows" else False
     command = "java -jar SCStemmers.jar".split()
@@ -36,14 +35,5 @@ if __name__ == '__main__':
         urllib.urlretrieve ("https://github.com/vukbatanovic/SCStemmers/releases/download/v1.0.0/SCStemmers.jar", "SCStemmers.jar")
     
     # Call Serbian stemmers jar from Python
-    print ("Running stemmer. Output of stemmer will be saved to " + outputFileStem + ".")
-    call(command + [stemmerID, inputFile, outputFileStem], shell=is_windows)
-
-    print ("Replacing numbers with <NUM> tags...")
-    output = open(outputFile, "w")
-    for line in fileinput.input(outputFileStem):
-        sentence = [NUM_TAG if isNumber(word) else word for word in line.split()]
-        output.write(" ".join(sentence))
-        output.write("\n")
-        
-    output.close()
+    print ("Running stemmer. Output of stemmer will be saved to " + outputFile + ".")
+    call(command + [stemmerID, inputFile, outputFile], shell=is_windows)
