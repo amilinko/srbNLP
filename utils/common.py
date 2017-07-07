@@ -77,6 +77,8 @@ def filter_btagger(word):
     original, POS, lemma = word.split('\t')
     if (POS == "Mc" and isNumber(lemma)):
         return NUM_TAG
+    elif isURL(lemma):
+        return URL_TAG
     elif POS == "#":
         return ""
     else:
@@ -86,6 +88,8 @@ def filter_reldi(word):
     original, POS, lemma = word.split('\t')
     if POS.startswith("Md"):
         return NUM_TAG
+    elif isURL (lemma):
+        return URL_TAG
     elif POS == "Z":
         return ""
     else:
