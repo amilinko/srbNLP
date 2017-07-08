@@ -2,7 +2,7 @@
  
 Usage:
   lemmatize.py BTagger <InputFile> <OutputFile> <PoS_scr> <PoS_fea> <Lem_scr> <Lem_fea>
-  lemmatize.py CSTLemma <InputFile> <OutputFile>
+  lemmatize.py CSTLemma <InputFile> <OutputFile> <HunPos_settings>
   lemmatize.py ReLDI <InputFile> <OutputFile>
   lemmatize.py -h | --help
   lemmatize.py --version
@@ -76,7 +76,11 @@ if __name__ == '__main__':
             print "This lemmatizer can only be run on Linux system! Aborting!"
             sys.exit(-1)
         else:
-            print "CSTLemma"
+            # CSTLemma arguments
+            HUNPOS_SETTINGS = arguments["<HunPos_settings>"]
+            
+            # Run HunPos tagger
+            call("cat " + inputFile + " | hunpos-tag " + HUNPOS_SETTINGS + " > " + TMP + "/PosOutTaggedCST.txt" , shell=True)
             
     # ReLDI
     if (arguments["ReLDI"]):
