@@ -2,7 +2,7 @@
  
 Usage:
   lemmatize.py BTagger <InputFile> <OutputFile> <PoS_scr> <PoS_fea> <Lem_scr> <Lem_fea>
-  lemmatize.py CSTLemma <InputFile> <OutputFile> <HunPos_settings>
+  lemmatize.py CSTLemma <InputFile> <OutputFile> <HunPos_settings> <Dictionary> <Patterns>
   lemmatize.py ReLDI <InputFile> <OutputFile>
   lemmatize.py -h | --help
   lemmatize.py --version
@@ -78,9 +78,14 @@ if __name__ == '__main__':
         else:
             # CSTLemma arguments
             HUNPOS_SETTINGS = arguments["<HunPos_settings>"]
+            DICTIONARY = arguments["<Dictionary>"]
+            PATTERNS = arguments["<Patterns>"]
             
             # Run HunPos tagger
             call("cat " + inputFile + " | hunpos-tag " + HUNPOS_SETTINGS + " > " + TMP + "/PosOutTaggedCST.txt" , shell=True)
+            
+            # Run CST lemmatizer
+            call(["cstlemma", "-L", "-i", TMP + "/PosOutTaggedCST.txt", "-I", "$w\\t$t\\t\\n", "-d", DICTIONARY, "-f", PATTERNS, "-eU", "-o", outputFile, "-t", "-H0", "-l", "-u", "-U"])
             
     # ReLDI
     if (arguments["ReLDI"]):
