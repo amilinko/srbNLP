@@ -3,7 +3,7 @@ import re
 
 # Regex for numbers, dates, scores, etc.
 NUM_TAG = "<NUM>"
-REGEX_NUM = re.compile(r"^(\d+[.,:\-]?)+$")
+REGEX_NUM = re.compile(r"^(\d+[.,:/\-]?)+$")
 
 # Regex for URLs
 URL_TAG = "<URL>"
