@@ -116,6 +116,7 @@ def parseDecodedLemmas (decodedLemmas, outputFile, filter_function):
     fout = open(outputFile,"w")
     for line in decoded.split("\n\n"):
         words = line.splitlines()
-        fout.write(" ".join([filter_function(word) for word in words]))
+        filtered_words = [filter_function(word) for word in words]
+        fout.write(" ".join([filtered_word for filtered_word in filtered_words if filtered_word]))
         fout.write("\n")
     fout.close()        
