@@ -82,10 +82,16 @@ if __name__ == '__main__':
             PATTERNS = arguments["<Patterns>"]
             
             # Run HunPos tagger
+            print "Running HunPos tagger"
             call("cat " + inputFile + " | hunpos-tag " + HUNPOS_SETTINGS + " > " + TMP + "/PosOutTaggedCST.txt" , shell=True)
             
+            # Adding <EOL> tags so sentences can be separated after CST lemmatizing
+            print "Adding <EOL> tags"
+            call("cat " + TMP + "/PosOutTaggedCST.txt | sed -r 's/^$/<EOL>\t<EOL>\t/g' > " + TMP + "/PosOutTaggedCSTLines.txt", shell=True)
+            
             # Run CST lemmatizer
-            call(["cstlemma", "-L", "-i", TMP + "/PosOutTaggedCST.txt", "-I", "$w\\t$t\\t\\n", "-d", DICTIONARY, "-f", PATTERNS, "-eU", "-o", outputFile, "-t", "-H0", "-l", "-u", "-U"])
+            print "Running CST lemmatizer"
+            call(["cstlemma", "-L", "-i", TMP + "/PosOutTaggedCSTLines.txt", "-I", "$w\\t$t\\t\\n", "-d", DICTIONARY, "-f", PATTERNS, "-eU", "-o", outputFile, "-t", "-H0", "-l", "-u", "-U"])
             
     # ReLDI
     if (arguments["ReLDI"]):
