@@ -76,6 +76,9 @@ if __name__ == '__main__':
             print "This lemmatizer can only be run on Linux system! Aborting!"
             sys.exit(-1)
         else:
+            
+            from utils.common import filter_cst
+            
             # CSTLemma arguments
             HUNPOS_SETTINGS = arguments["<HunPos_settings>"]
             DICTIONARY = arguments["<Dictionary>"]
@@ -91,7 +94,15 @@ if __name__ == '__main__':
             
             # Run CST lemmatizer
             print "Running CST lemmatizer"
-            call(["cstlemma", "-L", "-i", TMP + "/PosOutTaggedCSTLines.txt", "-I", "$w\\t$t\\t\\n", "-d", DICTIONARY, "-f", PATTERNS, "-eU", "-o", outputFile, "-t", "-H0", "-l", "-u", "-U"])
+            call(["cstlemma", "-L", "-i", TMP + "/PosOutTaggedCSTLines.txt", "-I", "$w\\t$t\\t\\n", "-d", DICTIONARY, "-f", PATTERNS, "-eU", "-o", TMP + "/CSTDecodedLemmas.txt", "-t", "-H0", "-u", "-U"])
+            
+            # Removing <EOL> tags
+            print "Removing <EOL> tags"
+            call("cat " + TMP + "/CSTDecodedLemmas.txt | sed -r 's/<EOL>\t<EOL>\t<EOL>//g' > " + TMP + "/CSTDecodedLemmasClean.txt", shell=True)
+            
+            # Parse decoded lemmas
+            print "Parsing decoded lemmas"
+            parseDecodedLemmas(TMP + "/CSTDecodedLemmasClean.txt", outputFile, filter_cst)
             
     # ReLDI
     if (arguments["ReLDI"]):

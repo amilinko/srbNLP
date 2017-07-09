@@ -94,6 +94,20 @@ def filter_reldi(word):
     else:
         return lemma
     
+def filter_cst(word):
+    original, lemma, POS = word.split('\t')
+    if POS.startswith("Md"):
+        return NUM_TAG
+    elif isURL (lemma):
+        return URL_TAG
+    elif POS == "Z":
+        if isNumber(lemma):
+            return NUM_TAG
+        else:
+            return ""
+    else:
+        return lemma
+    
 def parseDecodedLemmas (decodedLemmas, outputFile, filter_function):
     
     with open (decodedLemmas, "r") as fin:
