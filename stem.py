@@ -1,7 +1,7 @@
 """stem.py
  
 Usage:
-  stem.py <StemmerID> <InputFile> <OutputFile> [<StemOutput>]
+  stem.py <StemmerID> <InputFile> <OutputFile>
   stem.py -h | --help
   stem.py --version
  
@@ -18,8 +18,7 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version="1.0.0")
 
     from subprocess import call
-    import urllib, os, platform, fileinput
-    from utils.common import NUM_TAG, isNumber
+    import urllib, os, platform
 
     # Parse command line arguments
     stemmerID = arguments["<StemmerID>"]
