@@ -54,11 +54,12 @@ if __name__ == '__main__':
         POS_SCRIPT = arguments["<PoS_scr>"]
         
         # File names
-        POS_OUT = TMP + "/PosOut"
-        POS_OUT_TAGGED = TMP + "/PosOutTagged.txt"
-        LEMMA_OUT = TMP + "/LemmaOut"
-        LEMMA_OUT_TAGGED = TMP + "/LemmaOutTagged.txt"
-        LEMMAS_DECODED = TMP + "/decodedLemmas.txt"
+        FILENAME = os.path.basename(os.path.splitext(inputFile)[0])
+        POS_OUT = TMP + "/PosOut_" + FILENAME + "_"
+        POS_OUT_TAGGED = POS_OUT + "Tagged.txt"
+        LEMMA_OUT = TMP + "/LemmaOut_" + FILENAME + "_"
+        LEMMA_OUT_TAGGED = LEMMA_OUT + "Tagged.txt"
+        LEMMAS_DECODED = TMP + "/DecodedLemmas_" + FILENAME + ".txt"
         
         # Check if Btagger.jar exists in the current directory
         if(not os.path.isfile(BTAGGER)):
