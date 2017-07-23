@@ -37,6 +37,7 @@ if __name__ == '__main__':
     # Constants
     BTAGGER = "BTagger.jar"
     TMP = "tmp"
+    INPUT_FILENAME = os.path.basename(os.path.splitext(inputFile)[0])
         
     # Create TMP directory for storing intermediate results
     if(not os.path.isdir(TMP)):
@@ -54,12 +55,11 @@ if __name__ == '__main__':
         POS_SCRIPT = arguments["<PoS_scr>"]
         
         # File names
-        FILENAME = os.path.basename(os.path.splitext(inputFile)[0])
-        POS_OUT = TMP + "/PosOut_" + FILENAME + "_"
+        POS_OUT = TMP + "/PosOut_" + INPUT_FILENAME + "_"
         POS_OUT_TAGGED = POS_OUT + "Tagged.txt"
-        LEMMA_OUT = TMP + "/LemmaOut_" + FILENAME + "_"
+        LEMMA_OUT = TMP + "/LemmaOut_" + INPUT_FILENAME + "_"
         LEMMA_OUT_TAGGED = LEMMA_OUT + "Tagged.txt"
-        LEMMAS_DECODED = TMP + "/DecodedLemmas_" + FILENAME + ".txt"
+        LEMMAS_DECODED = TMP + "/DecodedLemmas_" + INPUT_FILENAME + ".txt"
         
         # Check if Btagger.jar exists in the current directory
         if(not os.path.isfile(BTAGGER)):
@@ -67,15 +67,19 @@ if __name__ == '__main__':
             urllib.urlretrieve ("http://clcl.unige.ch/btag/BTagger.jar", BTAGGER)
             
         # Run POS tagger
+        print "Running Pos tagger"
         call(("java -cp BTagger.jar bTagger/BTagger -p " + POS_OUT).split() + [inputFile,POS_WEIGHT,POS_SCRIPT], shell=is_windows)
         
         # Run lemmatizer
+        print "Running Lemmatizer"
         call(("java -cp BTagger.jar bTagger/BTagger -p " + LEMMA_OUT).split() + [POS_OUT_TAGGED, LEMMA_WEIGHT,LEMMA_SCRIPT], shell=is_windows)
         
         # Decode lemma tags
+        print "Decoding lemma tags"
         decodeBTaggerLemmaTags (LEMMA_OUT_TAGGED, LEMMAS_DECODED)
         
         # Parse decoded lemmatized input and prepare for vectorization
+        print "Parsing decoded lemmas"
         parseDecodedLemmas(LEMMAS_DECODED, outputFile, filter_btagger)
     
     # CSTLemma
@@ -93,10 +97,10 @@ if __name__ == '__main__':
             PATTERNS = arguments["<Patterns>"]
             
             # File names
-            POS_OUT_TAGGED = TMP + "/PosOutTaggedCST.txt"
-            POS_OUT_TAGGED_EOL = TMP + "/PosOutTaggedCST_EOL.txt"
-            LEMMAS_DECODED = TMP + "/CSTDecodedLemmas.txt"
-            LEMMAS_DECODED_CLEAN = TMP + "/CSTDecodedLemmasClean.txt"
+            POS_OUT_TAGGED = TMP + "/PosOutTaggedCST_" + INPUT_FILENAME + ".txt"
+            POS_OUT_TAGGED_EOL = TMP + "/PosOutTaggedCST_EOL_" + INPUT_FILENAME + ".txt"
+            LEMMAS_DECODED = TMP + "/CSTDecodedLemmas_" + INPUT_FILENAME + ".txt"
+            LEMMAS_DECODED_CLEAN = TMP + "/CSTDecodedLemmasClean_" + INPUT_FILENAME + ".txt"
             
             # Run HunPos tagger
             print "Running HunPos tagger"
