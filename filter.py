@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # Letters, digits and characters used in filtering
     serbian_letters = u"AaBbVvGgDdĐđEeŽžZzIiJjKkLlMmNnOoPpRrSsTtĆćUuFfHhCcČčŠš"
     english_letters = u"QqWwYyXx"
-    allowed_punctuation_lem = u".,:;\"\'?!\-"
+    allowed_punctuation_lem = u".,:;\"\'?!\-/"
     allowed_punctuation_stem = u"\'\-"
     digits = "0123456789"
 
