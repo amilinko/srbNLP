@@ -9,6 +9,9 @@ REGEX_NUM = re.compile(r"^(\d+[.,:/\-]?)+$")
 URL_TAG = "<URL>"
 REGEX_URL = re.compile(r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)+[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/.*)?$")
 
+# Punctuation
+PUNCTUATION = [".",",",":",";","\"","\'","?","!","\\","-","/"]
+ 
 def tokenize (inputFile, outputFile):
     
     with open (inputFile, "r") as fin:
@@ -30,6 +33,18 @@ def glue (inputFile, outputFile):
     
     with open (outputFile, "w") as fout:
         fout.write('\n'.join(lines))
+
+def filter_(inputFile, outputFile):
+    with open (inputFile, "r") as fin:
+        lines = fin.readlines()
+    
+    filtered_lines = []
+    for line in lines:
+        filtered_words = [word for word in line.split() if word not in PUNCTUATION]
+        filtered_lines.append(' '.join(filtered_words))
+    
+    with open (outputFile, "w") as fout:
+        fout.write('\n'.join(filtered_lines))
 
 def isNumber (word):
     return True if REGEX_NUM.match(word) else False
