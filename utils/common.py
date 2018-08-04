@@ -46,6 +46,18 @@ def filter_(inputFile, outputFile):
     with open (outputFile, "w") as fout:
         fout.write('\n'.join(filtered_lines))
 
+def replace_tags(inputFile, outputFile):
+    with open (inputFile, "r") as fin:
+        lines = fin.readlines()
+    
+    tagged_lines = []
+    for line in lines:
+        tagged_words = [NUM_TAG if isNumber(word) else (URL_TAG if isURL(word) else word) for word in line.split()]
+        tagged_lines.append(' '.join(tagged_words))
+    
+    with open (outputFile, "w") as fout:
+        fout.write('\n'.join(tagged_lines))
+
 def isNumber (word):
     return True if REGEX_NUM.match(word) else False
 

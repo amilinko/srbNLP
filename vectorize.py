@@ -27,7 +27,7 @@ class Sentences(object):
  
     def __iter__(self):
         for line in open(self.filename):
-            yield line.split()
+            yield [word.lower() for word in line.split()]
 
 if __name__ == '__main__':
 
