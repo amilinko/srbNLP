@@ -11,6 +11,8 @@ REGEX_URL = re.compile(r"^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|w
 
 # Punctuation
 PUNCTUATION = [".",",",":",";","\"","\'","?","!","\\","-","/"]
+COMMAS_REGEX = re.compile(r"^,+$")
+DOTS_REGEX = re.compile(r"^\.+$")
  
 def tokenize (inputFile, outputFile):
     
@@ -40,7 +42,7 @@ def filter_(inputFile, outputFile):
     
     filtered_lines = []
     for line in lines:
-        filtered_words = [word for word in line.split() if word not in PUNCTUATION]
+        filtered_words = [word for word in line.split() if ((word not in PUNCTUATION) and (not DOTS_REGEX.match(word)) and (not COMMAS_REGEX.match(word)))]
         filtered_lines.append(' '.join(filtered_words))
     
     with open (outputFile, "w") as fout:
