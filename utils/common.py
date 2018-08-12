@@ -103,7 +103,7 @@ def decodeBTaggerLemmaTags (inFileName, outFileName):
 
 def filter_btagger(word):
     original, POS, lemma = word.split('\t')
-    if (POS == "Mc" and isNumber(lemma)):
+    if isNumber(lemma):
         return NUM_TAG
     elif isURL(lemma):
         return URL_TAG
@@ -114,7 +114,7 @@ def filter_btagger(word):
 
 def filter_reldi(word):
     original, POS, lemma = word.split('\t')
-    if POS.startswith("Md"):
+    if isNumber(lemma):
         return NUM_TAG
     elif isURL (lemma):
         return URL_TAG
@@ -125,15 +125,12 @@ def filter_reldi(word):
     
 def filter_cst(word):
     original, lemma, POS = word.split('\t')
-    if POS.startswith("Md"):
+    if isNumber(lemma):
         return NUM_TAG
     elif isURL (lemma):
         return URL_TAG
     elif POS == "Z":
-        if isNumber(lemma):
-            return NUM_TAG
-        else:
-            return ""
+        return ""
     else:
         return lemma
     
